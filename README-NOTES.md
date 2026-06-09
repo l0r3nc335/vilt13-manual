@@ -31,7 +31,10 @@
 	return the ;extension=curl if there is an error upon php-v
 
 # INSTALL COMPOSER
----
+```sh
+sudo apt update
+sudo apt install -y composer
+```
 
 # INSTALL LARAVEl INSTALLER (X)
 ```sh 
@@ -55,8 +58,19 @@ composer create-project laravel/laravel vilt13-manual
 sudo apt update && sudo apt install unzip php-zip -y
 ```
 
+# COMPOSER INSTALL
+```sh 
+composer install
+```
+
 # START LARAVEL LOCAL DEVELOPMENT
 ```sh
 npm install && npm run build
 composer run dev
+```
+
+# ISSUE WITH EXTENSIONS
+```sh 
+sudo apt update
+sudo apt install -y php8.5-xml
 ```
