@@ -1,58 +1,172 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# DELETE DISTRO
+	wsl --unregister <DistroName>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# SHOW DISTRO ONLINE
+	wsl --list --online
 
-## About Laravel
+# INSTALL DISTRO
+	wsl --install -d <DISTRO>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+# INSTALL PHP STANDALONE, NON-HERD OR LARAVEL PATH
+	sudo apt install php8.5-cli
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+# FIND PHP.INI CONFIGURATION FILE
+	php -i | grep "php.ini"
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+# OPEN PHP.INI
+	sudo nano /etc/php/8.5/cli/php.ini
 
-## Learning Laravel
+# ENABLE KNOWN EXTENSIONS
+	[
+		extension=curl, 
+		extension=mbstring, 
+		extension=oepnssl, 
+		extension=pdo_mysql/pdo_pgsql
+	]
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+# INSTALL THE EXTENSIONS
+	sudo apt update
+	sudo apt install -y phpX.X-mysql phpX.X-curl phpX.X-mbstring
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+	return the ;extension=curl if there is an error upon php-v
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+# INSTALL COMPOSER
+```sh
+sudo apt update
+sudo apt install -y composer
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+# INSTALL LARAVEl INSTALLER (X)
+```sh 
+composer global require laravel/installer
+```
 
-## Contributing
+# NEW PROJECT VIA LARAVEl CLI (X)
+# cli guided setup (X)
+```sh
+laravel new laravel13-vilt
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# NEW PROJECT VIA COMPOSER
 
-## Code of Conduct
+```sh 
+composer create-project laravel/laravel vilt13-manual
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# FIX ISSUE WITH In ZipDownloader.php
+```sh
+sudo apt update && sudo apt install unzip php-zip -y
+```
 
-## Security Vulnerabilities
+# COMPOSER INSTALL
+```sh 
+composer install
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# START LARAVEL LOCAL DEVELOPMENT
+```sh
+npm install && npm run build
+composer run dev
+```
 
-## License
+# ISSUE WITH EXTENSIONS
+```sh 
+sudo apt update
+sudo apt install -y php8.5-xml
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# APP GENERATE KEY
+```sh
+php artisan key:generate
+```
+
+# ISSUE WITH DATABASE CONNECTION
+    - fix in .env
+
+# MIGRATE FOR THE FIRST TIME
+```sh 
+php artisan migrate
+```
+
+# VITE MANUAL CONFIGURATION
+    http://inertiajs.com/docs/v3/installation/server-side-setup
+# VUE PLUGIN FOR VITE
+
+```sh
+npm install --save-dev @vitejs/plugin-vue
+```
+    -will install "@vitejs/plugin-vue": "^6.0.7", to package.json
+
+
+# UPDATE vite.config.js
+    - import vue from '@vitejs/plugin-vue';
+    - THEN REGISTER THE  vue({}}
+
+# INSTALL INERTIA LARAVEL PACKAGE
+# SERVER SIDE SETUP
+    -https://inertiajs.com/docs/v3/installation/server-side-setup
+```sh 
+composer require inertiajs/inertia-laravel
+```
+
+# ROOT TEMPLATE SETUP
+    RENAME  - resources/views/welcome.blade.php
+    TO      - resources/views/app.blade.php
+    CODE IN - resources/views/app.blade.php 
+
+# PHP INERTIA MIDDLEWARE
+```sh 
+php artisan inertia:middleware
+```
+
+# bootstrap/app.php
+    - This will enable laravel to pass data to vue
+```php
+    use App\Http\Middleware\HandleInertiaRequests;
+
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->web(append: [
+            HandleInertiaRequests::class,
+        ]);
+    })
+```
+
+# CLIENT SIDE SETUP
+    - https://inertiajs.com/docs/v3/installation/client-side-setup
+
+# VUE PREREQUISITE
+```sh 
+npm install vue @vitejs/plugin-vue
+```
+
+# INITIALIZE INERTIA APP
+    resources/js/app.js
+```js
+import { defineConfig } from 'vite'
+import laravel from 'laravel-vite-plugin'
+import vue from '@vitejs/plugin-vue'
+
+export default defineConfig({
+    plugins: [
+        laravel({
+            input: ['resources/js/app.js'],
+            refresh: true,
+        }),
+        vue(),
+    ],
+})
+```
+# RUN VILT SETUP
+    -run in 2 separate terminals
+```sh 
+php artisan serve
+```
+```sh 
+npm run dev
+```
+
+# SETUP PAGES
+    create - resources/pages/Index/Index.vue
+
+# SETUP ROUTES
+    routes/web.php
