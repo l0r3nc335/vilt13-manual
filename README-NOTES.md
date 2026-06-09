@@ -89,7 +89,7 @@ php artisan migrate
 ```
 
 # VITE MANUAL CONFIGURATION
-
+    http://inertiajs.com/docs/v3/installation/server-side-setup
 # VUE PLUGIN FOR VITE
 
 ```sh
@@ -103,6 +103,8 @@ npm install --save-dev @vitejs/plugin-vue
     - THEN REGISTER THE  vue({}}
 
 # INSTALL INERTIA LARAVEL PACKAGE
+# SERVER SIDE SETUP
+    -https://inertiajs.com/docs/v3/installation/server-side-setup
 ```sh 
 composer require inertiajs/inertia-laravel
 ```
@@ -110,4 +112,61 @@ composer require inertiajs/inertia-laravel
 # ROOT TEMPLATE SETUP
     RENAME  - resources/views/welcome.blade.php
     TO      - resources/views/app.blade.php
+    CODE IN - resources/views/app.blade.php 
 
+# PHP INERTIA MIDDLEWARE
+```sh 
+php artisan inertia:middleware
+```
+
+# bootstrap/app.php
+    - This will enable laravel to pass data to vue
+```php
+    use App\Http\Middleware\HandleInertiaRequests;
+
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->web(append: [
+            HandleInertiaRequests::class,
+        ]);
+    })
+```
+
+# CLIENT SIDE SETUP
+    - https://inertiajs.com/docs/v3/installation/client-side-setup
+
+# VUE PREREQUISITE
+```sh 
+npm install vue @vitejs/plugin-vue
+```
+
+# INITIALIZE INERTIA APP
+    resources/js/app.js
+```js
+import { defineConfig } from 'vite'
+import laravel from 'laravel-vite-plugin'
+import vue from '@vitejs/plugin-vue'
+
+export default defineConfig({
+    plugins: [
+        laravel({
+            input: ['resources/js/app.js'],
+            refresh: true,
+        }),
+        vue(),
+    ],
+})
+```
+# RUN VILT SETUP
+    -run in 2 separate terminals
+```sh 
+php artisan serve
+```
+```sh 
+npm run dev
+```
+
+# SETUP PAGES
+    create - resources/pages/Index/Index.vue
+
+# SETUP ROUTES
+    routes/web.php
