@@ -74,3 +74,40 @@ composer run dev
 sudo apt update
 sudo apt install -y php8.5-xml
 ```
+
+# APP GENERATE KEY
+```sh
+php artisan key:generate
+```
+
+# ISSUE WITH DATABASE CONNECTION
+    - fix in .env
+
+# MIGRATE FOR THE FIRST TIME
+```sh 
+php artisan migrate
+```
+
+# VITE MANUAL CONFIGURATION
+
+# VUE PLUGIN FOR VITE
+
+```sh
+npm install --save-dev @vitejs/plugin-vue
+```
+    -will install "@vitejs/plugin-vue": "^6.0.7", to package.json
+
+
+# UPDATE vite.config.js
+    - import vue from '@vitejs/plugin-vue';
+    - THEN REGISTER THE  vue({}}
+
+# INSTALL INERTIA LARAVEL PACKAGE
+```sh 
+composer require inertiajs/inertia-laravel
+```
+
+# ROOT TEMPLATE SETUP
+    RENAME  - resources/views/welcome.blade.php
+    TO      - resources/views/app.blade.php
+
