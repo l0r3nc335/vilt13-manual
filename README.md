@@ -1,22 +1,43 @@
-# DELETE DISTRO
-	wsl --unregister <DistroName>
+# I. WINDOWS SUBSYSTEM FOR LINUX SETUP
 
-# SHOW DISTRO ONLINE
+# I.1. LIST EXISTING WSL DISTRO
+```sh
+    wsl --list
+```
+
+# I.2. DELETE DISTRO
+```sh
+  wsl --unregister <DistroName>
+```
+
+# I.3. SHOW DISTRO ONLINE
+```sh
 	wsl --list --online
+```
 
-# INSTALL DISTRO
-	wsl --install -d <DISTRO>
+# I.4. INSTALL DISTRO
+```sh
+  wsl --install -d <DISTRO>
+```
+	
+# II. LOCAL LINUX SETUP
 
-# INSTALL PHP STANDALONE, NON-HERD OR LARAVEL PATH
-	sudo apt install php8.5-cli
+# II.1. INSTALL PHP STANDALONE, NON-HERD OR LARAVEL PATH
+```sh
+  sudo apt install php8.5-cli
+```
 
-# FIND PHP.INI CONFIGURATION FILE
-	php -i | grep "php.ini"
+# II.2. FIND PHP.INI CONFIGURATION FILE
+```sh
+  php -i | grep "php.ini"
+```
 
-# OPEN PHP.INI
+# II.3. OPEN PHP.INI
+```sh 
 	sudo nano /etc/php/8.5/cli/php.ini
+```
 
-# ENABLE KNOWN EXTENSIONS
+# II.4. ENABLE KNOWN EXTENSIONS
 	[
 		extension=curl, 
 		extension=mbstring, 
@@ -24,103 +45,116 @@
 		extension=pdo_mysql/pdo_pgsql
 	]
 
-# INSTALL THE EXTENSIONS
-	sudo apt update
-	sudo apt install -y phpX.X-mysql phpX.X-curl phpX.X-mbstring
-
-	return the ;extension=curl if there is an error upon php-v
-
-# INSTALL COMPOSER
+# II.5. INSTALL THE ACTUAL EXTENSIONS
 ```sh
-sudo apt update
-sudo apt install -y composer
+  sudo apt update
+  sudo apt install -y phpX.X-mysql phpX.X-curl phpX.X-mbstring
+```
+return the ";extension=curl" if there is an error upon php-v
+
+# II.6. INSTALL COMPOSER
+```sh
+  sudo apt update
+  sudo apt install -y composer
 ```
 
 # INSTALL LARAVEl INSTALLER (X)
 ```sh 
-composer global require laravel/installer
+  composer global require laravel/installer
 ```
 
 # NEW PROJECT VIA LARAVEl CLI (X)
 # cli guided setup (X)
 ```sh
-laravel new laravel13-vilt
+  laravel new laravel13-vilt
 ```
 
-# NEW PROJECT VIA COMPOSER
+# III LARAVEL INSTALLATION AND INITIAL SETUP
+
+# III.1. NEW PROJECT VIA COMPOSER
 
 ```sh 
-composer create-project laravel/laravel vilt13-manual
+  composer create-project laravel/laravel vilt13-manual
 ```
 
-# FIX ISSUE WITH In ZipDownloader.php
+# III.2. FIX ISSUE WITH In ZipDownloader.php
 ```sh
-sudo apt update && sudo apt install unzip php-zip -y
+  sudo apt update && sudo apt install unzip php-zip -y
 ```
 
-# COMPOSER INSTALL
+# III.3 COMPOSER INSTALL
 ```sh 
-composer install
+  composer install
 ```
 
-# START LARAVEL LOCAL DEVELOPMENT
+# III.4 START LARAVEL LOCAL DEVELOPMENT
 ```sh
-npm install && npm run build
-composer run dev
+  npm install && npm run build
+  composer run dev
 ```
 
-# ISSUE WITH EXTENSIONS
+# III.5. ISSUE WITH EXTENSIONS
 ```sh 
-sudo apt update
-sudo apt install -y php8.5-xml
+  sudo apt update
+  sudo apt install -y php8.5-xml
 ```
 
-# APP GENERATE KEY
+# III.7. APP GENERATE KEY
 ```sh
-php artisan key:generate
+  php artisan key:generate
 ```
 
-# ISSUE WITH DATABASE CONNECTION
-    - fix in .env
+# III.8. ISSUE WITH DATABASE CONNECTION
+Fix in and populate database variables in .env
+```.dotenv
+    DB_CONNECTION=
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=
+    DB_USERNAME=
+    DB_PASSWORD=
+```
 
-# MIGRATE FOR THE FIRST TIME
+# III.9. MIGRATE FOR THE FIRST TIME
 ```sh 
-php artisan migrate
+  php artisan migrate
 ```
 
-# VITE MANUAL CONFIGURATION
+# IV. VILT MANUAL CONFIGURATION
+
+# IV.1 VITE MANUAL CONFIGURATION
     http://inertiajs.com/docs/v3/installation/server-side-setup
-# VUE PLUGIN FOR VITE
 
+# IV.2. VUE PLUGIN FOR VITE
+will install "@vitejs/plugin-vue": "^6.0.7", to package.json
 ```sh
-npm install --save-dev @vitejs/plugin-vue
+  npm install --save-dev @vitejs/plugin-vue
 ```
-    -will install "@vitejs/plugin-vue": "^6.0.7", to package.json
 
-
-# UPDATE vite.config.js
+# IV.3. UPDATE vite.config.js
     - import vue from '@vitejs/plugin-vue';
     - THEN REGISTER THE  vue({}}
 
-# INSTALL INERTIA LARAVEL PACKAGE
-# SERVER SIDE SETUP
+# IV.4. SETUP INERTIA LARAVEL PACKAGE
+
+# IV.4.a. SERVER SIDE SETUP
     -https://inertiajs.com/docs/v3/installation/server-side-setup
 ```sh 
-composer require inertiajs/inertia-laravel
+  composer require inertiajs/inertia-laravel
 ```
 
-# ROOT TEMPLATE SETUP
+# IV.4.b.ROOT TEMPLATE SETUP
     RENAME  - resources/views/welcome.blade.php
     TO      - resources/views/app.blade.php
     CODE IN - resources/views/app.blade.php 
 
-# PHP INERTIA MIDDLEWARE
+# IV.4.c. PHP INERTIA MIDDLEWARE
 ```sh 
-php artisan inertia:middleware
+  php artisan inertia:middleware
 ```
 
-# bootstrap/app.php
-    - This will enable laravel to pass data to vue
+# IV.4.d. bootstrap/app.php
+This will enable laravel to pass data to vue
 ```php
     use App\Http\Middleware\HandleInertiaRequests;
 
@@ -131,84 +165,85 @@ php artisan inertia:middleware
     })
 ```
 
-# CLIENT SIDE SETUP
+# IV.5 CLIENT SIDE SETUP
     - https://inertiajs.com/docs/v3/installation/client-side-setup
 
-# VUE PREREQUISITE
+# IV.5.a. VUE PREREQUISITE
 ```sh 
-npm install vue @vitejs/plugin-vue
+  npm install vue @vitejs/plugin-vue
 ```
 
-# INITIALIZE INERTIA APP
+# IV.5.b. INITIALIZE INERTIA APP
     resources/js/app.js
 ```js
-import { defineConfig } from 'vite'
-import laravel from 'laravel-vite-plugin'
-import vue from '@vitejs/plugin-vue'
-
-export default defineConfig({
-    plugins: [
-        laravel({
-            input: ['resources/js/app.js'],
-            refresh: true,
-        }),
-        vue(),
-    ],
-})
+    import { defineConfig } from 'vite'
+    import laravel from 'laravel-vite-plugin'
+    import vue from '@vitejs/plugin-vue'
+    
+    export default defineConfig({
+        plugins: [
+            laravel({
+                input: ['resources/js/app.js'],
+                refresh: true,
+            }),
+            vue(),
+        ],
+    })
 ```
-# RUN VILT SETUP
+# IV.5.c. RUN VILT SETUP
     -run in 2 separate terminals
 ```sh 
-php artisan serve
+  php artisan serve
 ```
 ```sh 
-npm run dev
+  npm run dev
 ```
 
-# SETUP PAGES
+# IV.5.d. SETUP PAGES
     create - resources/pages/Index/Index.vue
 
-# SETUP ROUTES
+# IV.5.e. SETUP ROUTES
     routes/web.php
 
-# DATA ACCESS PATTERN ========================
-# Controller → Model (Small applications)
+# V. DATA ACCESS PATTERN ========================
+
+# V.1. Controller → Model (Small applications)
 ```php
-class UserController extends Controller
-{
-    public function index()
+    class UserController extends Controller
     {
-        $users = User::all();
-        $user = User::find(1);
-        $users = User::where('status', 'active')->get();
+        public function index()
+        {
+            $users = User::all();
+            $user = User::find(1);
+            $users = User::where('status', 'active')->get();
+        }
     }
-}
 ```
-# Controller → Service → Mode (professional projects)
+# V.2. Controller → Service → Mode (professional projects)
 ```php
 // CONTROLLER
-class UserController extends Controller
-{
-    public function __construct(
-        protected UserService $userService
-    ) {}
-
-    public function index()
+    class UserController extends Controller
     {
-        return $this->userService->getActiveUsers();
+        public function __construct(
+            protected UserService $userService
+        ) {}
+    
+        public function index()
+        {
+            return $this->userService->getActiveUsers();
+        }
     }
-}
 // SERVICE
-class UserService
-{
-    public function getActiveUsers()
+    class UserService
     {
-        return User::where('status', 'active')->get();
+        public function getActiveUsers()
+        {
+            return User::where('status', 'active')->get();
+        }
     }
-}
 ```
 
-# Controller → Service → Repository → Model (large enterprise projects) **Preferred
+# V.3. Controller → Service → Repository → Model (large enterprise projects) **Preferred
 ```php
 // CONTROLLER
     class UserController extends Controller
@@ -246,9 +281,9 @@ class UserService
     }
 ```
 
-# WAYS TO RETRIEVE DATA ========================
+# VI. WAYS TO RETRIEVE DATA ========================
 
-# Eloquent ORM (Model-based)
+# VI.1 Eloquent ORM (Model-based)
 Pros: Clean and expressive Supports relationships (hasMany, belongsTo, etc.) Easy to maintain
 ```text
 Use it for: 
@@ -263,7 +298,7 @@ Use it for:
     $user_with_post = User::with('posts')->where('status', 'active')->get();
 ```
 
-# Query Builder
+# VI.2 Query Builder
 Pros: Faster than Eloquent for large datasets Less memory usage Good for complex queries
 ```text
     Use it when:
@@ -284,7 +319,7 @@ Pros: Faster than Eloquent for large datasets Less memory usage Good for complex
         ->get();
 ```
 
-# Raw SQL Queries
+# VI.3. Raw SQL Queries
 Pros: Maximum control Useful for highly optimized or database-specific queries
 ```text
 Use it when:
@@ -300,7 +335,7 @@ Use it when:
     DB::select("SELECT DATE(created_at), COUNT(*) FROM orders GROUP BY DATE(created_at)");
 ```
 
-# Database Facade Methods
+# VI.4. Database Facade Methods
 Technically Query Builder, but often considered separately because you're working directly with the DB facade.
 ```text
 Use it when:
@@ -315,20 +350,20 @@ Use it when:
         ->exists();
 ```
 
-# Stored Procedures
+# VI.5. Stored Procedures
 Pros: Logic lives in the database Can improve performance for complex operations
 ```php
 $results = DB::select('CALL GetActiveUsers()');
 ```
 
-# Relationships (Eloquent)
+# VI.6. Relationships (Eloquent)
 ```php
     $user = User::find(1);
     $posts = $user->posts;
     $users = User::with('posts')->get();
 ```
 
-# Cursor / Lazy Collections
+# VI.7. Cursor / Lazy Collections
 Pros: Useful for large datasets.
 ```text
 Use it when:
@@ -360,7 +395,7 @@ Use it when:
     });
 ```
 
-# Chunking
+# VI.8. Chunking
 Process records in batches.
 ```text
 Use it when
