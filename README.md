@@ -170,3 +170,78 @@ npm run dev
 
 # SETUP ROUTES
     routes/web.php
+
+# DATA ACCESS PATTERN ========================
+# Controller → Model (Small applications)
+```php
+class UserController extends Controller
+{
+    public function index()
+    {
+        $users = User::all();
+        $user = User::find(1);
+        $users = User::where('status', 'active')->get();
+    }
+}
+```
+# Controller → Service → Mode (professional projects)
+```php
+// CONTROLLER
+class UserController extends Controller
+{
+    public function __construct(
+        protected UserService $userService
+    ) {}
+
+    public function index()
+    {
+        return $this->userService->getActiveUsers();
+    }
+}
+// SERVICE
+class UserService
+{
+    public function getActiveUsers()
+    {
+        return User::where('status', 'active')->get();
+    }
+}
+```
+
+# Controller → Service → Repository → Model (large enterprise projects) **Preferred
+```php
+// CONTROLLER
+class UserController extends Controller
+{
+    public function __construct(
+        protected UserService $userService
+    ) {}
+
+    public function index()
+    {
+        return $this->userService->getActiveUsers();
+    }
+}
+
+// SERVICE
+class UserService
+{
+    public function __construct(
+        protected UserRepository $userRepository
+    ) {}
+
+    public function getActiveUsers()
+    {
+        return $this->userRepository->getActiveUsers();
+    }
+}
+
+// REPOSITORY
+class UserRepository
+{
+    public function getActiveUsers()
+    {
+        return User::where('status', 'active')->get();
+    }
+}
+```
