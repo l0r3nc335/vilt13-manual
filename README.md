@@ -211,37 +211,182 @@ class UserService
 # Controller → Service → Repository → Model (large enterprise projects) **Preferred
 ```php
 // CONTROLLER
-class UserController extends Controller
-{
-    public function __construct(
-        protected UserService $userService
-    ) {}
-
-    public function index()
+    class UserController extends Controller
     {
-        return $this->userService->getActiveUsers();
+        public function __construct(
+            protected UserService $userService
+        ) {}
+    
+        public function index()
+        {
+            return $this->userService->getActiveUsers();
+        }
     }
-}
 
 // SERVICE
-class UserService
-{
-    public function __construct(
-        protected UserRepository $userRepository
-    ) {}
-
-    public function getActiveUsers()
+    class UserService
     {
-        return $this->userRepository->getActiveUsers();
+        public function __construct(
+            protected UserRepository $userRepository
+        ) {}
+    
+        public function getActiveUsers()
+        {
+            return $this->userRepository->getActiveUsers();
+        }
     }
-}
 
 // REPOSITORY
-class UserRepository
-{
-    public function getActiveUsers()
+    class UserRepository
     {
-        return User::where('status', 'active')->get();
+        public function getActiveUsers()
+        {
+            return User::where('status', 'active')->get();
+        }
     }
-}
 ```
+
+# WAYS TO RETRIEVE DATA ========================
+
+# Eloquent ORM (Model-based)
+Pros: Clean and expressive Supports relationships (hasMany, belongsTo, etc.) Easy to maintain
+```text
+Use it for: 
+    1. Business logic 
+    2. CRUD operations 
+    3. Relationships
+```
+```php
+    $users = User::all();
+    $user = User::find(1);
+    $users = User::where('status', 'active')->get();
+    $user_with_post = User::with('posts')->where('status', 'active')->get();
+```
+
+# Query Builder
+Pros: Faster than Eloquent for large datasets Less memory usage Good for complex queries
+```text
+    Use it when:
+    
+    Queries get too complex or heavy
+    You don’t need model features (relationships, mutators, etc.)
+    Performance matters more than readability
+```
+```php
+    $users = DB::table('users')->get();
+    $user = DB::table('users')
+        ->where('id', 1)
+        ->first();
+
+    DB::table('orders')
+        ->join('users', 'users.id', '=', 'orders.user_id')
+        ->select('users.name', 'orders.total')
+        ->get();
+```
+
+# Raw SQL Queries
+Pros: Maximum control Useful for highly optimized or database-specific queries
+```text
+Use it when:
+    1. You need database-specific features
+    2. Highly optimized reports/queries
+    3. Complex aggregations are easier in SQL
+```
+```php
+    $users = DB::select(
+        'SELECT * FROM users WHERE status = ?',
+        ['active']
+    );
+    DB::select("SELECT DATE(created_at), COUNT(*) FROM orders GROUP BY DATE(created_at)");
+```
+
+# Database Facade Methods
+Technically Query Builder, but often considered separately because you're working directly with the DB facade.
+```text
+Use it when:
+    1. Logic lives in the database
+    2. Can improve performance for complex operations
+```
+```php
+    $value = DB::table('users')->value('email');
+    $count = DB::table('users')->count();
+    $exists = DB::table('users')
+        ->where('email', $email)
+        ->exists();
+```
+
+# Stored Procedures
+Pros: Logic lives in the database Can improve performance for complex operations
+```php
+$results = DB::select('CALL GetActiveUsers()');
+```
+
+# Relationships (Eloquent)
+```php
+    $user = User::find(1);
+    $posts = $user->posts;
+    $users = User::with('posts')->get();
+```
+
+# Cursor / Lazy Collections
+Pros: Useful for large datasets.
+```text
+Use it when:
+    1. Very large tables (100k+ rows)
+    2. When you process records one at a time
+    3. Avoiding memory overflow
+```
+```php
+    use App\Models\User;
+
+    foreach (User::cursor() as $user) {
+        // this was changed: process one record at a time
+        \Mail::to($user->email)->send(
+            new \App\Mail\WelcomeMail($user)
+        );
+    }
+
+    $users = User::where('active', true)->cursor();
+    
+    foreach ($users as $user) {
+        echo $user->name;
+    }
+
+// Lazy
+    $posts = Post::lazy(1000); 
+    
+    $posts->each(function ($post) {
+        $post->update(['processed' => true]);
+    });
+```
+
+# Chunking
+Process records in batches.
+```text
+Use it when
+    1. Bulk updates
+    2. Batch processing (e.g. syncing, analytics)
+    3. When you want control per group of records
+```
+```php
+    use App\Models\User;
+// Update user status in batches
+    User::where('last_login', '<', now()->subYear())
+        ->chunk(100, function ($users) {
+            foreach ($users as $user) {
+                // this was changed: batch processing per 100 users
+                $user->status = 'inactive';
+                $user->save();
+            }
+        });
+        
+// Export users in chunks
+    User::chunk(500, function ($users) {
+    foreach ($users as $user) {
+        // this was changed: process export logic per batch
+        echo $user->id . "," . $user->email . PHP_EOL;
+    }
+
+});
+```
+
